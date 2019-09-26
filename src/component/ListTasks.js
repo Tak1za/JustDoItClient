@@ -9,14 +9,15 @@ class ListTasks extends Component {
       tasks: [],
       message: null
     };
-    this.refreshCourses = this.refreshCourses.bind(this);
+    this.refreshTasks = this.refreshTasks.bind(this);
+    this.deleteTaskClicked = this.deleteTaskClicked.bind(this);
   }
 
   componentDidMount() {
-    this.refreshCourses();
+    this.refreshTasks();
   }
 
-  refreshCourses() {
+  refreshTasks() {
     DataService.retrieveAllTasks("Tak1za").then(response => {
       console.log(response);
       this.setState({
@@ -25,10 +26,20 @@ class ListTasks extends Component {
     });
   }
 
+  deleteTaskClicked(id) {
+    DataService.deleteTask("Tak1za", id).then(response => {
+      this.setState({ message: `Delete of course ${id} successful` });
+      this.refreshTasks();
+    });
+  }
+
   render() {
     return (
       <div className="container">
         <h3>All Tasks</h3>
+        {this.state.message && (
+          <div className="alert alert-success">{this.state.message}</div>
+        )}
         <div className="container">
           <table className="table">
             <thead>
@@ -36,6 +47,7 @@ class ListTasks extends Component {
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -44,6 +56,14 @@ class ListTasks extends Component {
                   <td>{task.id}</td>
                   <td>{task.title}</td>
                   <td>{task.description}</td>
+                  <td>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => this.deleteTaskClicked(task.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
