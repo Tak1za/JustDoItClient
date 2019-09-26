@@ -11,6 +11,8 @@ class ListTasks extends Component {
     };
     this.refreshTasks = this.refreshTasks.bind(this);
     this.deleteTaskClicked = this.deleteTaskClicked.bind(this);
+    this.updateTaskClicked = this.updateTaskClicked.bind(this);
+    this.addTaskClicked = this.addTaskClicked.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +35,14 @@ class ListTasks extends Component {
     });
   }
 
+  updateTaskClicked(id) {
+    this.props.history.push(`/tasks/${id}`);
+  }
+
+  addTaskClicked() {
+    this.props.history.push(`/tasks/-1`);
+  }
+
   render() {
     return (
       <div className="container">
@@ -47,6 +57,7 @@ class ListTasks extends Component {
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Update</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -56,6 +67,14 @@ class ListTasks extends Component {
                   <td>{task.id}</td>
                   <td>{task.title}</td>
                   <td>{task.description}</td>
+                  <td>
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => this.updateTaskClicked(task.id)}
+                    >
+                      Update
+                    </button>
+                  </td>
                   <td>
                     <button
                       className="btn btn-danger"
@@ -68,6 +87,11 @@ class ListTasks extends Component {
               ))}
             </tbody>
           </table>
+          <div className="row">
+            <button className="btn btn-success" onClick={this.addTaskClicked}>
+              Add
+            </button>
+          </div>
         </div>
       </div>
     );
